@@ -30,6 +30,7 @@
 	* month([日期对象,例如传入now()])	返回月
 	* monthname([日期对象,例如传入now()])	返回月名
 	* str_to_date('m-dd-yyyy','%Y-%c-%d') 将字符通过制定的格式转换成日期
+	* datediff('日期1','日期2')  计算两者日期之差
 	* date_format('2018-2-2','%Y/%c/%d') 	将日期转换成字符  ->  结果:`2018/2/2`
 	<img src="img/pc.png"/>
 - 其他函数
@@ -52,3 +53,60 @@
 		```
 		
 ### 分组函数
+- SUM	求和
+
+> select sum(salary) from employees;
+
+- AVG	求平均值
+
+> select avg(salary) from employees;
+
+- MAX	求最大值 
+
+> select max(salary) from employees;
+
+- MIN	求最小值
+
+> select min(salary) from employees;
+
+- COUNT	求记录的总数
+
+> select count(salary) from employees;
+
+分组函数用于数值型数据。`count`函数会取出不为NULL的数据总数。
+SUM、AVG一般用去数值型，MAX、MIN、COUNT可以处理任何类型。
+所有的分组函数中`NULL`值都`不参与`运算。
+
+分组函数中可以使用`distinct`,举例:
+
+`select sum(DISTINCT salary) from employees`
+
+先除去重复的数据，之后进行求和运算。
+
+同理: max、min、count、avg分组函数都支持去重运算。
+
+**重点** count(*)统计算有字段，只要`一行`中有一个有值，则+1计入到总计中。经常使用的是([*])，也有人用(1),用来统计多少条记录(`count([字段值])`的方式会忽略值为`NULL`的行，所以用`count(*)`>=`count([字段值])`的行数)
+
+**重点：和分组函数一同查询的字段要求是group by后的字段**
+
+### 分组查询
+
+关键字句:`group by`
+
+```sql
+select 分组函数,列(要求出现在group by的后面)
+from 表名
+where 条件
+group by 分组列表
+order by 排序列1 desc,排序列2 asc...
+limit 起始位置(0索引开始计),取多少条记录;
+```
+
+```sql
+SELECT COUNT(*),location_id FROM 
+employees
+GROUP BY location_id;
+```
+**以上查询结果: 查询出每个位置的部门个数。重点关键字: `每个`**
+
+
